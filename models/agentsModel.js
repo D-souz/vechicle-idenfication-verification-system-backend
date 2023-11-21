@@ -20,7 +20,6 @@ const agentSchema = mongoose.Schema({
     role: {
         type: String,
         required: true,
-        unique: true
     },
     telephone: {
         type: String,

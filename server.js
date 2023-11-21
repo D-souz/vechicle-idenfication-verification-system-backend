@@ -1,12 +1,16 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
 const express = require('express');
+const cors = require('cors');
 const connectDB = require('./mongodb/dbConnect');
+const agentRouter = require('./routes/agentRoutes');
+const enrolleeRouter = require('./routes/enrolleeRoutes');
 
-
+dotenv.config();
 const app = express();
 
 // middlewares
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true}));
 app.use((req, res, next) => {
     console.log(req.path + " " + req.method);
@@ -14,19 +18,9 @@ app.use((req, res, next) => {
 })
 
 // routes
+app.use('/api/agent', agentRouter);
+app.use('/api/enrollee', enrolleeRouter);
 
-// try {
-//     const port = process.env.PORT || 3001;
-//     mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => {
-//          app.listen(port, (error) => {
-//              console.log(error);
-//              console.log('db connected & listening on port: ' + port );
-//          })
-//     })
-//  } catch (error) {
-//      console.log(error);
-//  }
 
 // database connection && starting the server
 const startServer = async () => {
