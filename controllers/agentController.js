@@ -2,6 +2,7 @@ const AGENT = require('../models/agentsModel');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 // generating the token
 const tokenGenerator = (id) => {
@@ -129,21 +130,105 @@ const getAgents = async (req, res) => {
 // @route  GET /api/agent/:id
 // @acess  private
 const getSingleAgent = async (req, res) => {
-    res.json({ message: "single agent"});
+
+     // getting agent's id
+     const { id } = req.params;
+
+     // checking if the id is valid
+     if (!mongoose.Types.ObjectId.isValid(id)) {
+         return res.status(403).json({message: "No such agent found with that id!"});
+     }
+     try {
+ 
+         const agent = await AGENT.findById(id)
+ 
+         if (!agent) {
+             return res.status(403).json({message: 'no agent found!!'});
+         } else {
+             return res.status(200).json(agent);
+         }   
+ 
+     } catch (error) {
+         console.log(error);
+     }
 }
 
 // @desc   Updating a particular agent
 // @route  PUT /api/agent/:id
 // @acess  private
 const updateAgent = async (req, res) => {
-    res.json({ message: "agent updated"});
+
+    // getting the agent's id
+    const { id } = req.params;
+
+     // checking if its a valid id
+     if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(403).json("No such agent found with that id!")
+    }
+    try {
+
+        // finding the logged in agent
+        const agent = await AGENT.findById(id)
+
+        // checking if the agent was found
+        if (!agent) {
+            return res.status(402).json({message: "Agent not found!"});
+        }
+
+        // // checking if the logged in user matches the goal user
+        // if (GOAL.user.toString() !== user.id) {
+        //     res.status(401).json({message: "User not authorized!"})
+        // }
+       
+        const updatedAgent = await AGENT.findOneAndUpdate({_id: id},req.body, {new: true})
+        
+        if (!updatedAgent) {
+            return res.status(403).json("Agent not updated");
+        } else {
+            console.log(updatedAgent);
+            return res.status(200).json(updatedAgent);
+        }
+        
+        } catch (error) {
+            console.log(error);
+        }
 }
 
 // @desc    Delete a particular agent
 // @route  DELETE /api/agent/:id
 // @acess  private
 const deleteAgent = async (req, res) => {
-    res.json({ message: "agent deleted"});
+     // getting agent's id
+     const { id } = req.params;
+
+     if (!mongoose.Types.ObjectId.isValid(id)) {
+         return res.status(403).json("No such agent found with that id!")
+     }
+     try {
+         
+         // finding the logged in agent
+         const agent = await AGENT.findById(id)
+ 
+         // checking if the user was found
+         if (!agent) {
+             return res.status(402).json({message: "Agent not found!"});
+         }
+ 
+        //  // checking if the logged in user matches the goal user
+        //  if (GOAL.user.toString() !== user.id) {
+        //      res.status(401).json({message: "User not authorized!"})
+        //  }
+ 
+         const deletedAgent = await AGENT.findByIdAndDelete({_id: id})
+ 
+         if (!deletedAgent) {
+             return res.status(403).json("Agent not deleted!!")
+         } else {
+             return res.status(200).json(deletedAgent);
+         }
+     } catch (error) {
+         console.log(error);
+     }
 }
 
 module.exports = {

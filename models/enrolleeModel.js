@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 // creating the enrollee schema
 const enrolleeSchema = mongoose.Schema({
+    // agent: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'AGENT'
+    // },
     name: {
         type: String,
         required: true,
@@ -23,7 +28,7 @@ const enrolleeSchema = mongoose.Schema({
     },
     nin: {
         type: String,
-        required: true,
+        required: false,
         unique: true
     },
     vin: {
@@ -42,7 +47,7 @@ const enrolleeSchema = mongoose.Schema({
     },
     picture: {
         type: String,
-        required: true,
+        // required: true,
     }
 }, { timestamps: true });
 
