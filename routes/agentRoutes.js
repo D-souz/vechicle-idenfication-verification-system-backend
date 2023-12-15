@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const { registerAgent, loginAgent, getAgents, getSingleAgent, updateAgent, deleteAgent } = require('../controllers/agentController');
+const protectRoutes = require("../middleware/authMiddleware");
 
-// creating the agents rouutes
+
+// creating the agents routes
 
 // creating / sigining up a new agent
 router.post('/register', registerAgent);
 
 // logining in an agent
 router.post('/login', loginAgent)
+
+// protecting the api routes
+router.use(protectRoutes);
 
 // fetching all agents
 router.get('/agents', getAgents)

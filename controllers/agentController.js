@@ -114,6 +114,7 @@ const loginAgent = async (req, res) => {
 // @acess  private
 const getAgents = async (req, res) => {
 
+
     try {
         const agents = await AGENT.find({}).sort({createdAt: -1})
         if (!agents) {
@@ -141,6 +142,7 @@ const getSingleAgent = async (req, res) => {
      try {
  
          const agent = await AGENT.findById(id)
+        // const agent = await AGENT.findById(req.agent.id)
  
          if (!agent) {
              return res.status(403).json({message: 'no agent found!!'});

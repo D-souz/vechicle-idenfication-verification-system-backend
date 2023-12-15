@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { registerEnrollee, getEnrollees, getSingleEnrollee, updateEnrollee, deleteEnrollee } = require('../controllers/enrolleeController');
+const protectRoutes = require("../middleware/authMiddleware");
+
+// protecting the api routes
+router.use(protectRoutes);
 
 // creating / sigining up a new enrollee
 router.post('/register', registerEnrollee);

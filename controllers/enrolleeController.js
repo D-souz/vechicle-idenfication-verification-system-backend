@@ -148,12 +148,42 @@ const updateEnrollee = async (req, res) => {
             console.log(error);
         }
 }
-
 // @desc    Delete a particular enrollee
 // @route  DELETE /api/enrollee/:id
 // @acess  private
 const deleteEnrollee = async (req, res) => {
-    res.json({ message: "enrollee deleted"});
+
+    // getting enrollee's id
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(403).json("No such enrollee found with that id!")
+    }
+    try {
+        
+        // finding the logged in agent
+        const enrollee = await ENROLLEE.findById(id)
+
+        // checking if the user was found
+        if (!enrollee) {
+            return res.status(402).json({message: "Enrollee not found!"});
+        }
+
+    //  // checking if the logged in user matches the goal user
+    //  if (GOAL.user.toString() !== user.id) {
+    //      res.status(401).json({message: "User not authorized!"})
+    //  }
+
+        const deletedEnrollee = await ENROLLEE.findByIdAndDelete({_id: id})
+
+        if (!deletedEnrollee) {
+            return res.status(403).json("Enrollee not deleted!!")
+        } else {
+            return res.status(200).json(deletedEnrollee);
+        }
+    } catch (error) {
+        console.log(error);
+    }   
 }
 
 module.exports = {
