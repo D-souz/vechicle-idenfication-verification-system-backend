@@ -125,7 +125,7 @@ const updateEnrollee = async (req, res) => {
         // finding the logged in agent
         const enrollee = await ENROLLEE.findById(id)
 
-        // checking if the agent was found
+        // checking if the enrollee was found
         if (!enrollee) {
             return res.status(402).json({message: "Enrollee not found!"});
         }
@@ -161,7 +161,7 @@ const deleteEnrollee = async (req, res) => {
     }
     try {
         
-        // finding the logged in agent
+        // finding an enrollee
         const enrollee = await ENROLLEE.findById(id)
 
         // checking if the user was found

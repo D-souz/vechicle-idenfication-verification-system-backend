@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./mongodb/dbConnect');
 const agentRouter = require('./routes/agentRoutes');
 const enrolleeRouter = require('./routes/enrolleeRoutes');
+const qrcodeRouter = require('./routes/qrcodeRoutes');
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/agent', agentRouter);
 app.use('/api/enrollee', enrolleeRouter);
+app.use('/api/qrcode', qrcodeRouter);
 
 
 // database connection && starting the server
