@@ -45,6 +45,9 @@ const enrolleeSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    gender: {
+        type: String,
+    },
     picture: {
         type: String,
         // required: true,

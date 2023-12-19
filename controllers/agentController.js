@@ -15,7 +15,7 @@ const tokenGenerator = (id) => {
 const registerAgent = async (req, res) => {
 
     // getting agent info from the input fields
-    const { name, email, password, role, telephone} = req.body;
+    const { name, email, password, role, telephone, gender} = req.body;
 
     try {
                 // ************************************************************ validation
@@ -49,7 +49,8 @@ const registerAgent = async (req, res) => {
         email,
         password: hashedPassword,
         role,
-        telephone
+        telephone,
+        gender
     })
 
     // checking if the agent was created 
@@ -100,6 +101,9 @@ const loginAgent = async (req, res) => {
                 _id: agent._id, 
                 name: agent.name,
                 email: agent.email,
+                role: agent.role, 
+                telephone: agent.telephone,
+                gender: agent.gender,
                 token: token
             });
         }
@@ -141,7 +145,7 @@ const getSingleAgent = async (req, res) => {
      }
      try {
  
-         const agent = await AGENT.findById(id)
+         const agent = await AGENT.findById(id).select('-password')
         // const agent = await AGENT.findById(req.agent.id)
  
          if (!agent) {
@@ -182,7 +186,7 @@ const updateAgent = async (req, res) => {
         //     res.status(401).json({message: "User not authorized!"})
         // }
        
-        const updatedAgent = await AGENT.findOneAndUpdate({_id: id},req.body, {new: true})
+        const updatedAgent = await AGENT.findOneAndUpdate({_id: id},req.body, {new: true}).select('-password')
         
         if (!updatedAgent) {
             return res.status(403).json("Agent not updated");

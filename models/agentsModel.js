@@ -25,7 +25,10 @@ const agentSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    gender: {
+        type: String,
+    },
 }, { timestamps: true });
 
 // creating the agent model

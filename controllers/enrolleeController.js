@@ -20,6 +20,7 @@ const registerEnrollee = async (req, res) => {
         vin,
         numberPlate,
         model,
+        gender,
         picture
      } = req.body;
     
@@ -53,6 +54,7 @@ const registerEnrollee = async (req, res) => {
             vin,
             numberPlate,
             model,
+            gender,
             picture
             // agent: agentID
          })
@@ -86,7 +88,7 @@ const getEnrollees = async (req, res) => {
 // @route  GET /api/enrollee/:id
 // @acess  private
 const getSingleEnrollee = async (req, res) => {
-         // getting agent's id
+         // getting enrolless's id
          const { id } = req.params;
 
          // checking if the id is valid
