@@ -1,20 +1,16 @@
 const mongoose = require('mongoose');
 
 const accessLogSchema = new mongoose.Schema({
-  enrolleeID: {
+    enrolleeID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'ENROLLEE'
   },
-  accessType: {
-    type: String,
-    enum: ['grant-in', 'deny', 'grant-out'],
-    required: true
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  },
-});
+  accessType: String,
+  accessInCount: { type: Number, default: 0 },
+  accessOutCount: { type: Number, default: 0 },
+  denyCount: { type: Number, default: 0 },
+
+}, { timestamps: true});
 
 module.exports = mongoose.model('ACCESSLOG', accessLogSchema);

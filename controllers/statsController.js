@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const ENROLLEE = require('../models/enrolleeModel');
 const ACCESSLOG = require('../models/statsModel')
-const mongoose = require('mongoose');
+const AGENT = require('../models/agentsModel');
+
 
 // @desc   Grantting an Enrollee access in
 // @route  POST /api/acess/grant-in/:id
@@ -22,6 +24,7 @@ const grantAccessIn = async (req, res) => {
           });
         return res.status(201).json({ message: 'Access granted in' });
       } catch (error) {
+        console.log(error)
         return res.status(500).json({ error: 'Failed to save access log' });
       }
     res.json({message: "access grantted!"})
@@ -80,7 +83,8 @@ const grantAccessOut = async (req, res) => {
 // @route  GET /api/acess/stats
 // @acess  private
 const allStats = async (req, res) => {
-    try {
+
+      try {
         const stats = await ACCESSLOG.aggregate([
           {
             $group: {
@@ -112,45 +116,46 @@ const allStats = async (req, res) => {
 const enrolleeStats = async (req, res) => {
     const { id } = req.params;
 
-    try {
-      const stats = await ACCESSLOG.aggregate([
-        {
-          $match: {
-            enrolleeID: new mongoose.Types.ObjectId(id),
-          },
+  try {
+    const stats = await ACCESSLOG.aggregate([
+      {
+        $match: {
+          enrolleeID: new mongoose.Types.ObjectId(id),
         },
-        {
-          $group: {
-            _id: null,
-            accessIn: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-in'] }, 1, 0] } },
-            denyAccess: { $sum: { $cond: [{ $eq: ['$accessType', 'deny'] }, 1, 0] } },
-            accessOut: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-out'] }, 1, 0] } },
-            totalGrantedIn: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-in'] }, 1, 0] } },
-            totalGrantedOut: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-out'] }, 1, 0] } },
-            totalDenied: { $sum: { $cond: [{ $eq: ['$accessType', 'deny'] }, 1, 0] } },
-            lastUpdated: { $max: '$timestamp' },
-          },
+      },
+      {
+        $group: {
+          _id: null,
+          accessIn: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-in'] }, 1, 0] } },
+          denyAccess: { $sum: { $cond: [{ $eq: ['$accessType', 'deny'] }, 1, 0] } },
+          accessOut: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-out'] }, 1, 0] } },
+          totalGrantedIn: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-in'] }, 1, 0] } },
+          totalGrantedOut: { $sum: { $cond: [{ $eq: ['$accessType', 'grant-out'] }, 1, 0] } },
+          totalDenied: { $sum: { $cond: [{ $eq: ['$accessType', 'deny'] }, 1, 0] } },
+          lastUpdated: { $max: '$timestamp' },
         },
-      ]);
-  
-      if (stats.length === 0) {
-        return res.status(404).json({ error: 'Access statistics not found' });
-      }
-  
-      const accessStats = stats[0];
-      accessStats.lastUpdated = accessStats.lastUpdated.toISOString();
-  
-      res.json(accessStats);
-    } catch (error) {
-      console.error('Failed to fetch access statistics:', error);
-      res.status(500).json({ error: 'Failed to fetch access statistics' });
+      },
+    ]);
+
+    if (stats.length === 0) {
+      return res.status(404).json({ error: 'Access statistics not found' });
     }
+
+    const accessStats = stats[0];
+    accessStats.lastUpdated = accessStats.lastUpdated.toISOString();
+
+    res.json(accessStats);
+  } catch (error) {
+    console.error('Failed to fetch access statistics:', error);
+    res.status(500).json({ error: 'Failed to fetch access statistics' });
+  }
 }
+
 
 module.exports = {
     grantAccessIn,
     denyAccess,
     grantAccessOut,
     allStats,
-    enrolleeStats
+    enrolleeStats,
 }

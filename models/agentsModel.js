@@ -26,9 +26,24 @@ const agentSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    age: {
+        type: Number,
+        required: true
+    },
+    userType: {
+        type: String,
+        required: true
+    },
     gender: {
         type: String,
+        required: true
     },
+    secretKey: {
+        type: String
+    },
+    downloadsCount: { type: Number, default: 0 },
+    generationsCount: { type: Number, default: 0 },
+    scansCount: { type: Number, default: 0 },
 }, { timestamps: true });
 
 // creating the agent model

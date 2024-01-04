@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const enrolleeSchema = mongoose.Schema({
     agent: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        // required: true,
         ref: 'AGENT'
     },
     name: {
@@ -51,7 +51,20 @@ const enrolleeSchema = mongoose.Schema({
     picture: {
         type: String,
         // required: true,
-    }
+    },
+    grantedIn: [{
+        grantedBy: { type: String },
+        dateTime: { type: Date }
+      }],
+      grantedOut: [{
+        grantedBy: { type: String },
+        dateTime: { type: Date }
+      }],
+      denied: [{
+        deniedBy: { type: String },
+        dateTime: { type: Date }
+      }],
+
 }, { timestamps: true });
 
 // creating the enrollee schema

@@ -15,13 +15,13 @@ const tokenGenerator = (id) => {
 const registerAgent = async (req, res) => {
 
     // getting agent info from the input fields
-    const { name, email, password, role, telephone, gender} = req.body;
+    const { name, email, password, role, telephone, gender, age, userType } = req.body;
 
     try {
                 // ************************************************************ validation
 
     // checking if all fleids where entered
-    if (!name || ! email || !password || !role || !telephone) {
+    if (!name || ! email || !password || !role || !telephone || !gender || !age || !userType) {
         return res.status(403).json({message: "Please fill in all feilds!"});
     }
 
@@ -50,6 +50,8 @@ const registerAgent = async (req, res) => {
         password: hashedPassword,
         role,
         telephone,
+        age,
+        userType,
         gender
     })
 
@@ -104,6 +106,8 @@ const loginAgent = async (req, res) => {
                 role: agent.role, 
                 telephone: agent.telephone,
                 gender: agent.gender,
+                age: agent.age,
+                userType: agent.userType,
                 token: token
             });
         }

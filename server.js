@@ -6,6 +6,7 @@ const agentRouter = require('./routes/agentRoutes');
 const enrolleeRouter = require('./routes/enrolleeRoutes');
 const qrcodeRouter = require('./routes/qrcodeRoutes');
 const statsRouter = require('./routes/statsRoutes');
+const qrcodeStatsRouter = require('./routes/qrcodeStatsRoutes');
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/agent', agentRouter);
 app.use('/api/enrollee', enrolleeRouter);
 app.use('/api/qrcode', qrcodeRouter);
 app.use('/api/access', statsRouter);
+app.use('/api/qrcode-stats', qrcodeStatsRouter);
 
 
 // database connection && starting the server
