@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const AGENT = require('../models/agentsModel');
 const ENROLLEE = require('../models/enrolleeModel');
-// const ACCESS = require('../models/accessModel')
+const ACCESSLOG = require('../models/statsModel');
 
 // @desc   Saving downloaded qrcodes by agent
 // @route  POST /api/qrcode-stats/download
@@ -123,127 +123,155 @@ const scansCount = async (req, res) => {
   // @desc   Getting enrollees grantted access in after scanning by an agent
   // @route  POST /api/qrcode-stats/grantInAccess/:id
   // @acess  private
-  const accessIn = async (req, res) => {
+  // const accessIn = async (req, res) => {
 
 
-     // getting the enrollee's id
-     const { id } = req.params;
-     const { grantedBy } = req.body;
+  //    // getting the enrollee's id
+  //    const { id } = req.params;
+  //    const { grantedBy } = req.body;
 
-      // checking if its a valid id
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(403).json("No such enrollee found with that id!")
-    } 
+  //     // checking if its a valid id
+  //     if (!mongoose.Types.ObjectId.isValid(id)) {
+  //       return res.status(403).json("No such enrollee found with that id!")
+  //   } 
 
     
-  try {
-    // Update granted in count and record the granter with date and time
-    const updatedAccess = await ENROLLEE.findOneAndUpdate(
-      {_id: id},
-      { $push: { grantedIn: { grantedBy, dateTime: new Date() } } },
-      { new: true }
-    );
+  // try {
+  //   // Update granted in count and record the granter with date and time
+  //   const updatedAccess = await ENROLLEE.findOneAndUpdate(
+  //     {_id: id},
+  //     { $push: { grantedIn: { grantedBy, dateTime: new Date() } } },
+  //     { new: true }
+  //   );
 
-    return res.status(200).json(updatedAccess);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
+  //   return res.status(200).json(updatedAccess);
+  // } catch (error) {
+  //   console.error(error);
+  //   return res.status(500).json({ message: 'Internal server error' });
+  // }
 
-  }
+  // }
 
   // @desc   Getting enrollees grantted access in after scanning by an agent
   // @route  POST /api/qrcode-stats/grantOutAccess/:id
   // @acess  private
-  const accessOut = async (req, res) => {
+//   const accessOut = async (req, res) => {
 
 
-    // getting the enrollee's id
-    const { id } = req.params;
-    const { grantedBy } = req.body;
+//     // getting the enrollee's id
+//     const { id } = req.params;
+//     const { grantedBy } = req.body;
 
-     // checking if its a valid id
-     if (!mongoose.Types.ObjectId.isValid(id)) {
-       return res.status(403).json("No such enrollee found with that id!")
-   } 
+//      // checking if its a valid id
+//      if (!mongoose.Types.ObjectId.isValid(id)) {
+//        return res.status(403).json("No such enrollee found with that id!")
+//    } 
 
    
- try {
-   // Update granted in count and record the granter with date and time
-   const updatedAccess = await ENROLLEE.findOneAndUpdate(
-     {_id: id},
-     { $push: { grantedOut: { grantedBy, dateTime: new Date() } } },
-     { new: true }
-   );
+//  try {
+//    // Update granted in count and record the granter with date and time
+//    const updatedAccess = await ENROLLEE.findOneAndUpdate(
+//      {_id: id},
+//      { $push: { grantedOut: { grantedBy, dateTime: new Date() } } },
+//      { new: true }
+//    );
 
-   return res.status(200).json(updatedAccess);
- } catch (error) {
-   console.error(error);
-   return res.status(500).json({ message: 'Internal server error' });
- }
+//    return res.status(200).json(updatedAccess);
+//  } catch (error) {
+//    console.error(error);
+//    return res.status(500).json({ message: 'Internal server error' });
+//  }
 
- }
+//  }
 
    // @desc   Getting enrollees grantted access in after scanning by an agent
   // @route  POST /api/qrcode-stats/denyAccess/:id
   // @acess  private
-  const denyAccess = async (req, res) => {
+  // const denyAccess = async (req, res) => {
 
 
-    // getting the enrollee's id
-    const { id } = req.params;
-    const { deniedBy } = req.body;
+//     // getting the enrollee's id
+//     const { id } = req.params;
+//     const { deniedBy } = req.body;
 
-     // checking if its a valid id
-     if (!mongoose.Types.ObjectId.isValid(id)) {
-       return res.status(403).json("No such enrollee found with that id!")
-   } 
+//      // checking if its a valid id
+//      if (!mongoose.Types.ObjectId.isValid(id)) {
+//        return res.status(403).json("No such enrollee found with that id!")
+//    } 
 
    
- try {
-   // Update granted in count and record the granter with date and time
-   const updatedAccess = await ENROLLEE.findOneAndUpdate(
-     {_id: id},
-     { $push: { denied: { deniedBy, dateTime: new Date() } } },
-     { new: true }
-   );
+//  try {
+//    // Update granted in count and record the granter with date and time
+//    const updatedAccess = await ENROLLEE.findOneAndUpdate(
+//      {_id: id},
+//      { $push: { denied: { deniedBy, dateTime: new Date() } } },
+//      { new: true }
+//    );
 
-   return res.status(200).json(updatedAccess);
- } catch (error) {
-   console.error(error);
-   return res.status(500).json({ message: 'Internal server error' });
- }
+//    return res.status(200).json(updatedAccess);
+//  } catch (error) {
+//    console.error(error);
+//    return res.status(500).json({ message: 'Internal server error' });
+//  }
 
- }
+//  }
 
   // @desc   Getting all access counts for an enrollee
   // @route  GET /api/qrcode-stats/access/:id
   // @acess  private
 const access = async (req, res) => {
-  const { id } = req.params;
+  // const { id } = req.params;
 
-     // checking if its a valid id
-     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(403).json("No such enrollee found with that id!")
-  } 
+  //    // checking if its a valid id
+  //    if (!mongoose.Types.ObjectId.isValid(id)) {
+  //     return res.status(403).json("No such enrollee found with that id!")
+  // } 
 
+  // try {
+
+  //   const accessCounts = await ENROLLEE.findById(id)
+
+  //   const grantedInCount = accessCounts.grantedIn.length;
+  //   const grantedOutCount = accessCounts.grantedOut.length;
+  //   const deniedCount = accessCounts.denied.length;
+
+  //   const countResult = {
+  //     grantedInCount,
+  //     grantedOutCount,
+  //     deniedCount
+  //   };
+  //   res.status(200).json(countResult)
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).json({ message: 'Internal server error' });
+  // }
   try {
+    const accessData = await ACCESSLOG.aggregate([
+      {
+        $lookup: {
+          from: 'enrollees',
+          localField: 'enrolleeID',
+          foreignField: '_id',
+          as: 'enrollee',
+        },
+      },
+      {
+        $lookup: {
+          from: 'agents',
+          localField: 'agentID',
+          foreignField: '_id',
+          as: 'agent',
+        },
+      },
+      {$sort: {"timestamp": -1}},
+      {$unwind: "$enrollee"},
+      {$unwind: "$agent"},
+    ]);
 
-    const accessCounts = await ENROLLEE.findById(id)
-
-    const grantedInCount = accessCounts.grantedIn.length;
-    const grantedOutCount = accessCounts.grantedOut.length;
-    const deniedCount = accessCounts.denied.length;
-
-    const countResult = {
-      grantedInCount,
-      grantedOutCount,
-      deniedCount
-    };
-    res.status(200).json(countResult)
+    return res.json(accessData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 }
 
@@ -277,9 +305,9 @@ const getAccessDetails = async (req, res) => {
     qrcodesDownloaded,
     scansCount,
     qrcodesGenerated,
-    accessIn,
-    accessOut,
-    denyAccess,
+    // accessIn,
+    // accessOut,
+    // denyAccess,
     access,
     agentScansCount,
     getAccessDetails

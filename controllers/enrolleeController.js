@@ -2,7 +2,7 @@ const ENROLLEE = require('../models/enrolleeModel');
 // const AGENT = require('../models/agentsModel');
 const mongoose = require('mongoose');
 const validator = require('validator');
-
+const path = require('path')
 
 // @desc   Registering a new enrollee
 // @route  POST /api/enrollee/register
@@ -21,9 +21,10 @@ const registerEnrollee = async (req, res) => {
         numberPlate,
         model,
         gender,
-        picture
+        age,
      } = req.body;
-    
+     
+     const image = req.file.filename;
     try {
 
         // checking if all fleids where entered
@@ -55,8 +56,8 @@ const registerEnrollee = async (req, res) => {
             numberPlate,
             model,
             gender,
-            picture
-            // agent: agentID
+            age,
+            image
          })
         console.log(createEnrollee);
         return res.status(200).json(createEnrollee);
@@ -132,12 +133,9 @@ const updateEnrollee = async (req, res) => {
             return res.status(402).json({message: "Enrollee not found!"});
         }
 
-        // // checking if the logged in user matches the goal user
-        // if (GOAL.user.toString() !== user.id) {
-        //     res.status(401).json({message: "User not authorized!"})
-        // }
-       
-        const updatedEnrollee = await ENROLLEE.findOneAndUpdate({_id: id},req.body, {new: true})
+       const { body } = req.body
+       const image = req.file.filename;
+        const updatedEnrollee = await ENROLLEE.findOneAndUpdate({_id: id},{ body, image }, {new: true})
         
         if (!updatedEnrollee) {
             return res.status(403).json("Enrollee not updated");
@@ -170,11 +168,6 @@ const deleteEnrollee = async (req, res) => {
         if (!enrollee) {
             return res.status(402).json({message: "Enrollee not found!"});
         }
-
-    //  // checking if the logged in user matches the goal user
-    //  if (GOAL.user.toString() !== user.id) {
-    //      res.status(401).json({message: "User not authorized!"})
-    //  }
 
         const deletedEnrollee = await ENROLLEE.findByIdAndDelete({_id: id})
 

@@ -107,7 +107,11 @@ const loginAgent = async (req, res) => {
                 telephone: agent.telephone,
                 gender: agent.gender,
                 age: agent.age,
+                downloadsCount: agent.downloadsCount,
+                generationsCount: agent.generationsCount,
+                scansCount: agent.scansCount,
                 userType: agent.userType,
+                profileImage: agent.profileImage,
                 token: token
             });
         }
@@ -185,17 +189,14 @@ const updateAgent = async (req, res) => {
             return res.status(402).json({message: "Agent not found!"});
         }
 
-        // // checking if the logged in user matches the goal user
-        // if (GOAL.user.toString() !== user.id) {
-        //     res.status(401).json({message: "User not authorized!"})
-        // }
-       
-        const updatedAgent = await AGENT.findOneAndUpdate({_id: id},req.body, {new: true}).select('-password')
+        const { body } = req.body;
+        const profileImage = req.file.filename;
+        
+        const updatedAgent = await AGENT.findOneAndUpdate({_id: id},{ body, profileImage }, {new: true}).select('-password')
         
         if (!updatedAgent) {
             return res.status(403).json("Agent not updated");
         } else {
-            console.log(updatedAgent);
             return res.status(200).json(updatedAgent);
         }
         

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { registerAgent, loginAgent, getAgents, getSingleAgent, updateAgent, deleteAgent } = require('../controllers/agentController');
 const protectRoutes = require("../middleware/authMiddleware");
-
+const upload = require('../middleware/multerMiddleware');
 
 // creating the agents routes
 
@@ -22,7 +22,7 @@ router.get('/agents', getAgents)
 router.get('/:id', getSingleAgent)
 
 // updating an agent
-router.patch('/:id', updateAgent)
+router.patch('/:id', upload.single('profileImage'), updateAgent)
 
 // deleting an agent
 router.delete('/:id', deleteAgent)

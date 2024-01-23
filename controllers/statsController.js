@@ -12,44 +12,56 @@ const grantAccessIn = async (req, res) => {
     // getting enrolless's id
     const { id } = req.params;
 
-    // checking if the id is valid
+    // getting the agent's id
+    const { agentID } = req.body;
+
+    // checking if the ids are valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(403).json({message: "No such enrollee found with that id!"});
+    }
+    if (!mongoose.Types.ObjectId.isValid(agentID)) {
+      return res.status(403).json({message: "No such agent found with that id!"});
     }
 
     try {
         const accessLog = await ACCESSLOG.create({
             enrolleeID: id,
             accessType: 'grant-in',
+            agentID: agentID
           });
         return res.status(201).json({ message: 'Access granted in' });
       } catch (error) {
         console.log(error)
         return res.status(500).json({ error: 'Failed to save access log' });
       }
-    res.json({message: "access grantted!"})
 }
 
 // @desc   Denying an Enrollee access in
 // @route  POST /api/acess/deny-access/:id
 // @acess  private
 const denyAccess = async (req, res) => {
-
      // getting enrolless's id
      const { id } = req.params;
+
+     // getting the agent's id
+    const { agentID } = req.body;
 
      // checking if the id is valid
      if (!mongoose.Types.ObjectId.isValid(id)) {
          return res.status(403).json({message: "No such enrollee found with that id!"});
      }
-    
+     if (!mongoose.Types.ObjectId.isValid(agentID)) {
+      return res.status(403).json({message: "No such agent found with that id!"});
+    }
     try {
         const accessLog = await ACCESSLOG.create({
             enrolleeID: id,
             accessType: 'deny',
+            agentID: agentID
           });
         res.status(201).json({ message: 'Access denied' });
       } catch (error) {
+        console.log(error)
         res.status(500).json({ error: 'Failed to save access log' });
       }
 }
@@ -62,15 +74,21 @@ const grantAccessOut = async (req, res) => {
     // getting enrolless's id
     const { id } = req.params;
 
+     // getting the agent's id
+     const { agentID } = req.body;
+
     // checking if the id is valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(403).json({message: "No such enrollee found with that id!"});
     }
-
+    if (!mongoose.Types.ObjectId.isValid(agentID)) {
+      return res.status(403).json({message: "No such agent found with that id!"});
+    }
     try {
         const accessLog = await ACCESSLOG.create({
             enrolleeID: id,
             accessType: 'grant-out',
+            agentID: agentID
           });
         res.status(201).json({ message: 'Access granted out' });
       } catch (error) {
@@ -138,7 +156,7 @@ const enrolleeStats = async (req, res) => {
     ]);
 
     if (stats.length === 0) {
-      return res.status(404).json({ error: 'Access statistics not found' });
+      return res.status(404).json({ error: 'No access statistics found' });
     }
 
     const accessStats = stats[0];
