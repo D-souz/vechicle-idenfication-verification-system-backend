@@ -12,9 +12,6 @@ const accessLogSchema = new mongoose.Schema({
     ref: 'AGENT'
   },
   accessType: String,
-  // accessInCount: { type: Number, default: 0 },
-  // accessOutCount: { type: Number, default: 0 },
-  // denyCount: { type: Number, default: 0 },
   timestamp: {
     type: Date,
     default: Date.now,

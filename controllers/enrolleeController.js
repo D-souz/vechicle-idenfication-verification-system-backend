@@ -1,8 +1,8 @@
 const ENROLLEE = require('../models/enrolleeModel');
-// const AGENT = require('../models/agentsModel');
 const mongoose = require('mongoose');
 const validator = require('validator');
-const path = require('path')
+const path = require('path');
+
 
 // @desc   Registering a new enrollee
 // @route  POST /api/enrollee/register

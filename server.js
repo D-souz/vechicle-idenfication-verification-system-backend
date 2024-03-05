@@ -9,6 +9,7 @@ const statsRouter = require('./routes/statsRoutes');
 const qrcodeStatsRouter = require('./routes/qrcodeStatsRoutes');
 const path = require('path');
 
+
 dotenv.config();
 const app = express();
 
